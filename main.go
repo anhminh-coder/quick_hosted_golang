@@ -21,5 +21,5 @@ func main() {
 	}))
 
 	app.Post("/test", Test)
-	app.Listen(":8888")
+	app.Listen("0.0.0.0:8888")
 }
