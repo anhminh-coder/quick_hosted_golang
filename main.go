@@ -3,39 +3,13 @@ package main
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
-	"tiktok_info/database"
-	"tiktok_info/entity"
 )
 
-func CreateUser(ctx *fiber.Ctx) error {
-	userRequest := new(entity.UserRequest)
-
-	if err := ctx.BodyParser(userRequest); err != nil {
-		return ctx.Status(400).JSON(fiber.Map{
-			"message": "failed",
-			"error":   err.Error(),
-		})
-	}
-
-	var user entity.User
-	user.Name = userRequest.Name
-	user.Phone = userRequest.Phone
-
-	err := database.DB.Create(&user).Error
-	if err != nil {
-		return ctx.Status(400).JSON(fiber.Map{
-			"message": "failed",
-		})
-	}
-
-	return ctx.Status(200).JSON(fiber.Map{
-		"message": "success",
-	})
+func Test(ctx *fiber.Ctx) error {
+	return ctx.SendString("Hello")
 }
 
 func main() {
-	database.DatabaseInit()
-	database.RunMigration()
 
 	app := fiber.New()
 
@@ -46,6 +20,6 @@ func main() {
 		AllowCredentials: true,
 	}))
 
-	app.Post("/users", CreateUser)
+	app.Post("/test", Test)
 	app.Listen(":8888")
 }
