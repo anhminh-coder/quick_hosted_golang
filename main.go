@@ -20,6 +20,9 @@ func main() {
 		AllowCredentials: true,
 	}))
 
-	app.Post("/test", Test)
-	app.Listen("0.0.0.0:8888")
+	app.Get("/test", Test)
+	app.Get("/", func(ctx *fiber.Ctx) error {
+		return ctx.SendString("Home")
+	})
+	app.Listen(":8080")
 }
