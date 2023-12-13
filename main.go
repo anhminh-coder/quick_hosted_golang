@@ -4,6 +4,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"os"
+	"path/filepath"
 )
 
 type User struct {
@@ -18,7 +19,10 @@ func Test(ctx *fiber.Ctx) error {
 			"error": "bad request",
 		})
 	}
-	file, err := os.OpenFile("data.txt", os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0644)
+
+	filePath := filepath.Join(".", "data.txt")
+
+	file, err := os.OpenFile(filePath, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0644)
 	if err != nil {
 		return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"error": "opening file error",
@@ -38,7 +42,9 @@ func Test(ctx *fiber.Ctx) error {
 }
 
 func ServeFile(ctx *fiber.Ctx) error {
-	return ctx.SendFile("data.txt")
+	filePath := filepath.Join(".", "data.txt")
+
+	return ctx.SendFile(filePath)
 }
 
 func main() {
